@@ -8,8 +8,8 @@ class Decoder:
     """
     def __init__(self, matrix_rank):
         self.matrix_rank = matrix_rank
-        self.encrypted_password = []
-        self.cipher_grill = []
+        self.encrypted_password = self.set_encrypted_password()
+        self.cipher_grill = self.set_cipher_grill()
         self.decrypted_password = ''
 
     @classmethod
@@ -18,11 +18,6 @@ class Decoder:
         Функции для ввода ранга матрицы.
         :return: Целое положительное число -> ранг матрицы.
         """
-
-        # Так как это доп. конструктор, сюда можно было бы вставить функции,
-        # отвечающие за ввод матриц пароля и решетки. Однако, я пока не знаю,
-        # как связать между собой 'self' и 'cls'.
-
         while 1:
             # Ввод и проверка значения ранга матрицы.
             try:
@@ -48,6 +43,7 @@ class Decoder:
         :return: Матрица -> зашифрованный пароль.
         """
         n = self.matrix_rank
+        matrix = []
 
         # Поочередно вводим n строк матрицы,
         # попутно проверяя их на корректность.
@@ -64,8 +60,10 @@ class Decoder:
                           f'{n} символа(ов).')
                     continue
 
-                self.encrypted_password.append(list_elements)
+                matrix.append(list_elements)
                 break
+
+        return matrix
 
     def set_cipher_grill(self):
         """
@@ -74,6 +72,7 @@ class Decoder:
         :return: Матрица -> шифровальная решетка.
         """
         n = self.matrix_rank
+        matrix = []
 
         # Поочередно вводим n строк матрицы,
         # попутно проверяя их на корректность.
@@ -98,12 +97,14 @@ class Decoder:
                         if j not in ['X', '.']:
                             raise Exception
 
-                    self.cipher_grill.append(list_elements)
+                    matrix.append(list_elements)
                     break
 
                 except Exception:
                     print(f'Ошибка в строке {i + 1}. Вы можете ввести только '
                           'символы: "X" или ".".')
+
+        return matrix
 
     def get_decrypted_password(self):
         """
@@ -137,7 +138,5 @@ class Decoder:
 
 
 cipher = Decoder.set_matrix_rank()
-cipher.set_encrypted_password()
-cipher.set_cipher_grill()
 decrypted_password = cipher.get_decrypted_password()
 print(f'Расшифрованный пароль: {decrypted_password}')
