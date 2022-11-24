@@ -2,88 +2,104 @@
 2. Перестановки.
 Дано: x, y, z, n.
 
-Задание: нужно получить список всех возможных перестановок
-чисел x, y, z, где x + y + z != n.
+Задание: нужно получить список всех возможных перестановок чисел x, y, z,
+где x + y + z != n.
 
-Пример: Добавить примеры! x = y = z = 1 n = 2, результат:
-[[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1]]
+Пример:
+
+ x = 0 y = 0 z = 1 n = 2,
+ результат: [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1]]
 """
 
 
-from math import factorial
-
-
-class SequencesGenerator:
-    def __init__(self, source_sequence):
-        self.source_sequence = sorted(source_sequence)
-        self.length = len(source_sequence)
-        self.sequences_amount = factorial(self.length)
-        self.list_of_sequences = []
-
-    def __repr__(self):
-        return repr(self.source_sequence)
+class Sequences:
+    """
+    Класс, который позволяет вывести все возможные последовательности
+    переменных, а сумма этих переменных не равна введенному
+    пользователем значением.
+    """
+    def __init__(self, user_sequence, incorrect_sum):
+        self.variables_amount = 3
+        self.user_sequence = user_sequence
+        self.incorrect_sum = incorrect_sum
+        self.correct_sequences = self.calculate_correct_sequences_3vars()
 
     @classmethod
-    def set_source_sequence(cls):
+    def set_data(cls):
+        user_sequence = cls.set_user_sequence()
+        incorrect_sum = cls.set_incorrect_sum()
+        return cls(user_sequence, incorrect_sum)
+
+    @staticmethod
+    def set_user_sequence():
         """
-        Дополнительный конструктор, нужен для ввода с клавиатуры.
-        Проверяет текст, который ввел пользователь.
-        :return: Корректно введенный список.
+        Функция, записывающая и проверяющая введенные пользователем переменные.
+        :return: Список целых чисел.
         """
+        n = 3
+        variables_dictionary = []
+        print('Введите последовательность ваших переменных.')
+
+        for i in range(n):
+            while 1:
+                try:
+                    user_input = input(f'Переменная №{i + 1}: ')
+                    variable = int(user_input)
+
+                    variables_dictionary.append(variable)
+                    break
+
+                except ValueError:
+                    print('Ошибка. Введенное может быть только целым числом.')
+
+        return variables_dictionary
+
+    @staticmethod
+    def set_incorrect_sum():
         while 1:
             try:
-                user_input = input('Введите список элементов через '
-                                   'пробел: ')
-                user_list = user_input.split()
-                int_user_list = list(map(int, user_list))
-                return cls(int_user_list)
-
-            except Exception:
-                print('Ошибка. В списке могут быть только целые числа.\n'
-                      'Попробуйте еще раз.')
-
-    def get_list_of_defined_sequences(self):
-        self.list_of_sequences.append(self.source_sequence)
-
-        for i in range(self.sequences_amount):
-            new_sequence = self.generate_next_sequence()
-            if new_sequence:
-                self.list_of_sequences.append(new_sequence)
-            else:
+                user_input = input('Введите "нежелательную" сумму: ')
+                variable = int(user_input)
                 break
 
-        return self.list_of_sequences
+            except ValueError:
+                print('Ошибка. Введенное может быть только целым числом.')
 
-    def generate_next_sequence(self):
-        current_index = self.length - 2
-        sequence = self.source_sequence[:]
+        return variable
 
-        while (current_index != -1 and sequence[current_index] >=
-               sequence[current_index + 1]):
-            current_index -= 1
+    def calculate_correct_sequences_3vars(self):
+        """
+        Функция, составляющая список всех возможных последовательностей
+        из введенных пользователем переменных. Работает только для
+        3 переменных.
 
-        if current_index == -1:
-            return None
+        Не знаю, как оптимизировать этот алгоритм для
+        другого количества переменных.
 
-        index_to_change = self.length - 1
+        :return: Список -> все последовательности, сумма элементов которых
+        не равна введенному пользователем числу.
+        """
+        n = self.variables_amount
+        source_sequence = self.user_sequence
+        sequences = []
+        already_encountered_sequences = []
 
-        while sequence[current_index] >= sequence[index_to_change]:
-            index_to_change -= 1
+        for i in range(n):
+            for j in range(n):
+                for k in range(n):
+                    new_sequence = [source_sequence[i], source_sequence[j],
+                                    source_sequence[k]]
 
-        sequence[current_index], sequence[index_to_change] = \
-            sequence[index_to_change], sequence[current_index]
+                    if new_sequence in already_encountered_sequences:
+                        continue
+                    elif sum(new_sequence) == self.incorrect_sum:
+                        continue
 
-        sequence = sequence[:current_index + 1] + sorted(sequence[current_index + 1:])
-        self.source_sequence = sequence[:]
-        return sequence
+                    already_encountered_sequences.append(new_sequence)
+                    sequences.append(new_sequence)
+
+        return sequences
 
 
-# Какой смысл этого задания? Если мы будем перебирать каждую
-# последовательность, нам еще нужно перебирать последовательности,
-# когда они равны нулю.
-
-user_list = SequencesGenerator.set_source_sequence()
-# user_list = SequencesGenerator([1, 3, 4])
-print(user_list)
-
-print(user_list.get_list_of_defined_sequences())
+my_sequence = Sequences.set_data()
+print(f'Ответ: {my_sequence.correct_sequences}')
