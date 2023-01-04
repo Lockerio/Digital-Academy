@@ -19,10 +19,35 @@
 """
 
 
+def return_values_according_to_the_rules(n: int) -> iter:
+    """
+    Функцию-генератор, которая "лениво" возвращает значения от 0 до n,
+    определенные соответствующими правилами.
+    :param n: Число, которым будет заканчиваться последовательность.
+    :return: Итератор.
+    """
+    for i in range(n + 1):
+        if i == 0:
+            temp = -10
+        elif i % 3 == 0:
+            temp = 45
+        elif i % 5 == 0:
+            temp = (i / 5) + 93
+        else:
+            temp = i / 2
+
+            # Если получили целое число, уберем ненужные нули после запятой
+            if temp % 1 == 0:
+                temp = int(temp)
+
+        yield temp
 
 
 def do_main():
-    pass
+    gen = return_values_according_to_the_rules(7)
+    for x in gen:
+        print(x, end=' ')
+
 
 if __name__ == '__main__':
     do_main()
