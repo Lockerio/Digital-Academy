@@ -1,4 +1,4 @@
-from Tasks_12.Task_2.Classes.University.faculty import Faculty
+from Tasks_12.Task_2_updated.Classes.University.faculty import Faculty
 
 
 class Group(Faculty):

@@ -11,8 +11,8 @@
 а также наиболее "проблемные" предметы.
 """
 import random
-from Tasks_12.Task_2.Classes.Relations.student_subject_in_group import Student_Subject
-from Tasks_12.Task_2.Classes.Relations.group_subject import Group_Subject
+from Tasks_12.Task_2_updated.Classes.Relations.student_subject_in_group import Student_Subject
+from Tasks_12.Task_2_updated.Classes.Relations.group_subject import Group_Subject
 
 # Исходные данные
 faculties = ["ФВС"]

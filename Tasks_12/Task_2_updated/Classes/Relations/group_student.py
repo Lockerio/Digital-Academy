@@ -1,5 +1,5 @@
-from Tasks_12.Task_2.Classes.University.group import Group
-from Tasks_12.Task_2.Classes.person import Person
+from Tasks_12.Task_2_updated.Classes.University.group import Group
+from Tasks_12.Task_2_updated.Classes.person import Person
 
 
 # Выбрано такое написание имен, чтобы показать связь М:М.
